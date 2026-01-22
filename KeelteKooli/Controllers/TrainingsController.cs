@@ -1,8 +1,8 @@
-﻿using KeelteKooli.Models;
-using System;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
+using KeelteKooli.Models;
+using Microsoft.AspNet.Identity;
 
 public class TrainingsController : Controller
 {
@@ -10,27 +10,6 @@ public class TrainingsController : Controller
 
     public ActionResult Index()
     {
-        if (!db.Trainings.Any())
-        {
-            var teacher = new Teacher { Nimi = "Mari Spek" };
-            var course = new Course { Nimetus = "Eesti Keelt A1", Keel = "Estonian", Tase = "A1" };
-            db.Teachers.Add(teacher);
-            db.Courses.Add(course);
-            db.SaveChanges();
-
-            var training = new Training
-            {
-                CourseId = course.Id,
-                Teacher = teacher,
-                AlgusKuupaev = DateTime.Today,
-                LoppKuupaev = DateTime.Today.AddMonths(1),
-                Hind = 150,
-                MaxOsalejaid = 10
-            };
-            db.Trainings.Add(training);
-            db.SaveChanges();
-        }
-
         var trainings = db.Trainings
             .Include(t => t.Course)
             .Include(t => t.Teacher)
@@ -38,6 +17,49 @@ public class TrainingsController : Controller
             .ToList();
 
         return View(trainings);
+    }
+
+    [Authorize(Roles = "Student")]
+    public ActionResult Register(int id)
+    {
+        string userId = User.Identity.GetUserId();
+
+        bool exists = db.Registrations.Any(r =>
+            r.TrainingId == id &&
+            r.ApplicationUserId == userId);
+
+        if (exists)
+        {
+            TempData["Message"] = "Вы уже зарегистрированы на этот курс!";
+            return RedirectToAction("Index");
+        }
+
+        db.Registrations.Add(new Registration
+        {
+            TrainingId = id,
+            ApplicationUserId = userId,
+            Staatus = "Pending"
+        });
+
+        db.SaveChanges();
+
+        TempData["Message"] = "Вы успешно записаны на курс!";
+        return RedirectToAction("MyCourses");
+    }
+
+    [Authorize(Roles = "Student")]
+    public ActionResult MyCourses()
+    {
+        string userId = User.Identity.GetUserId();
+
+        var myTrainings = db.Registrations
+            .Where(r => r.ApplicationUserId == userId)
+            .Include(r => r.Training.Course)
+            .Include(r => r.Training.Teacher)
+            .Select(r => r.Training)
+            .ToList();
+
+        return View(myTrainings);
     }
 
     protected override void Dispose(bool disposing)
