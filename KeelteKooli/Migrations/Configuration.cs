@@ -31,10 +31,10 @@
             }
 
             var userManager = new UserManager<ApplicationUser>(
-            new UserStore<ApplicationUser>(context));
+                new UserStore<ApplicationUser>(context));
 
+            // ----- Teacher -----
             var teacherUser = userManager.FindByEmail("teacher@test.ee");
-
             if (teacherUser == null)
             {
                 teacherUser = new ApplicationUser
@@ -55,10 +55,36 @@
                     Kvalifikatsioon = "C1",
                     ApplicationUserId = teacherUser.Id
                 });
-
                 context.SaveChanges();
             }
-        }
 
+            // ----- Admin -----
+            var adminUser = userManager.FindByEmail("admin@test.ee");
+            if (adminUser == null)
+            {
+                adminUser = new ApplicationUser
+                {
+                    UserName = "admin@test.ee",
+                    Email = "admin@test.ee"
+                };
+
+                userManager.Create(adminUser, "Test123!");
+                userManager.AddToRole(adminUser.Id, "Admin");
+            }
+
+            // ----- Student -----
+            var studentUser = userManager.FindByEmail("student@test.ee");
+            if (studentUser == null)
+            {
+                studentUser = new ApplicationUser
+                {
+                    UserName = "student@test.ee",
+                    Email = "student@test.ee"
+                };
+
+                userManager.Create(studentUser, "Test123!");
+                userManager.AddToRole(studentUser.Id, "Student");
+            }
+        }
     }
 }
