@@ -7,13 +7,13 @@ namespace KeelteKooli.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class AddRegistrationsToTraining3 : IMigrationMetadata
+    public sealed partial class AddRegistrationsToTraining : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddRegistrationsToTraining3));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddRegistrationsToTraining));
         
         string IMigrationMetadata.Id
         {
-            get { return "202601220904150_AddRegistrationsToTraining3"; }
+            get { return "202601220920094_AddRegistrationsToTraining"; }
         }
         
         string IMigrationMetadata.Source
