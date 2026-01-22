@@ -15,16 +15,37 @@
                     aria-expanded="false" aria-label="Vaheta navigeerimist">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Avaleht", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Meist", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+                    @if (User.IsInRole("Opilane"))
+                    {
+                        <li>@Html.ActionLink("Minu kursused", "MyCourses", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+
+                    @if (User.IsInRole("Opetaja"))
+                    {
+                        <li>@Html.ActionLink("Töölauale", "Dashboard", "Teacher", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Minu kursused", "Index", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Õpetajad", "Index", "Teacher", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Kursused", "Index", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Registreeringud", "Index", "Registrations", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
                 </ul>
+
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
