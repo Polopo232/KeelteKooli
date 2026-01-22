@@ -20,13 +20,12 @@ namespace KeelteKooli.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Training> Trainings { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Training> Trainings { get; set; }
+        public DbSet<Course> Courses { get; set; }
         public DbSet<Registration> Registrations { get; set; }
 
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext() : base("DefaultConnection")
         {
         }
 
