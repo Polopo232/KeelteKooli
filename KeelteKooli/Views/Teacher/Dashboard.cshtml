@@ -1,0 +1,29 @@
+﻿@model KeelteKooli.Models.Teacher
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>@Model.Nimi - Minu kursused</h2>
+
+@foreach (var t in Model.Trainings)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>@t.Course.Nimetus</h5>
+            <p>
+                Algus: @t.AlgusKuupaev.ToShortDateString() <br />
+                Lõpp: @t.LoppKuupaev.ToShortDateString() <br />
+                Õpilased:
+                <ul>
+                    @foreach (var r in t.Registrations)
+                    {
+                        <li>@r.User.UserName</li>
+                    }
+                </ul>
+            </p>
+        </div>
+    </div>
+}
+
+
