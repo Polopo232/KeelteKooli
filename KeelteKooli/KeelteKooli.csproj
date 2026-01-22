@@ -184,6 +184,10 @@
     <Compile Include="Migrations\202601220920094_AddRegistrationsToTraining.Designer.cs">
       <DependentUpon>202601220920094_AddRegistrationsToTraining.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202601220926517_FixTeacherTraining.cs" />
+    <Compile Include="Migrations\202601220926517_FixTeacherTraining.Designer.cs">
+      <DependentUpon>202601220926517_FixTeacherTraining.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -268,10 +272,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Trainings\Index.cshtml" />
     <Content Include="Views\Trainings\MyCourses.cshtml" />
+    <Content Include="Views\Teacher\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Teacher\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -306,6 +310,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202601220920094_AddRegistrationsToTraining.resx">
       <DependentUpon>202601220920094_AddRegistrationsToTraining.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601220926517_FixTeacherTraining.resx">
+      <DependentUpon>202601220926517_FixTeacherTraining.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
