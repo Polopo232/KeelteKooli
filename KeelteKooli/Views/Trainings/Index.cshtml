@@ -1,0 +1,35 @@
+﻿@model IEnumerable<KeelteKooli.Models.Training>
+
+@{
+    ViewBag.Title = "Trainings";
+}
+
+<div class="row">
+    @foreach (var t in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@t.Course.Nimetus</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@t.Teacher.Nimi</h6>
+                    <p class="card-text">
+                        @t.Course.Keel - @t.Course.Tase <br />
+                        @t.Hind € <br />
+                        Начало: @t.AlgusKuupaev.ToShortDateString() <br />
+                        Конец: @t.LoppKuupaev.ToShortDateString()
+                    </p>
+
+                    @if (t.Registrations != null && t.Registrations.Count >= t.MaxOsalejaid)
+                    {
+                        <span class="badge bg-danger">ГРУППА ЗАПОЛНЕНА</span>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
+                           class="btn btn-primary">Записаться</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
