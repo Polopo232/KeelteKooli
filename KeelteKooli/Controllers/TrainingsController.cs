@@ -30,7 +30,7 @@ public class TrainingsController : Controller
 
         if (exists)
         {
-            TempData["Message"] = "Вы уже зарегистрированы на этот курс!";
+            TempData["Message"] = "Olete juba registreerunud sellele kursusele!";
             return RedirectToAction("Index");
         }
 
@@ -43,7 +43,7 @@ public class TrainingsController : Controller
 
         db.SaveChanges();
 
-        TempData["Message"] = "Вы успешно записаны на курс!";
+        TempData["Message"] = "Olete edukalt registreerunud kursusele!";
         return RedirectToAction("MyCourses");
     }
 
