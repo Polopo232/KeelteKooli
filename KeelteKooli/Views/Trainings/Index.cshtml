@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<KeelteKooli.Models.Training>
 
 @{
-    ViewBag.Title = "Trainings";
+    ViewBag.Title = "Kursused";
 }
 
 <div class="row">
@@ -15,18 +15,18 @@
                     <p class="card-text">
                         @t.Course.Keel - @t.Course.Tase <br />
                         @t.Hind € <br />
-                        Начало: @t.AlgusKuupaev.ToShortDateString() <br />
-                        Конец: @t.LoppKuupaev.ToShortDateString()
+                        Algus: @t.AlgusKuupaev.ToShortDateString() <br />
+                        Lõpp: @t.LoppKuupaev.ToShortDateString()
                     </p>
 
                     @if (t.Registrations != null && t.Registrations.Count >= t.MaxOsalejaid)
                     {
-                        <span class="badge bg-danger">ГРУППА ЗАПОЛНЕНА</span>
+                        <span class="badge bg-danger">Rühm täis</span>
                     }
                     else
                     {
                         <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
-                           class="btn btn-primary">Записаться</a>
+                           class="btn btn-primary">Registreeru</a>
                     }
                 </div>
             </div>

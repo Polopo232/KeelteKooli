@@ -4,7 +4,7 @@
     ViewBag.Title = "Minu kursused";
 }
 
-<h2>Мои курсы</h2>
+<h2>Minu kursused</h2>
 
 <div class="row">
     @foreach (var t in Model)
@@ -17,8 +17,8 @@
                     <p class="card-text">
                         @t.Course.Keel - @t.Course.Tase <br />
                         @t.Hind € <br />
-                        Начало: @t.AlgusKuupaev.ToShortDateString() <br />
-                        Конец: @t.LoppKuupaev.ToShortDateString()
+                        Algus: @t.AlgusKuupaev.ToShortDateString() <br />
+                        Lõpp: @t.LoppKuupaev.ToShortDateString()
                     </p>
                 </div>
             </div>
