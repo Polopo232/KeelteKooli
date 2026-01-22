@@ -1,5 +1,8 @@
 ﻿namespace KeelteKooli.Migrations
 {
+    using KeelteKooli.Models;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -9,15 +12,53 @@
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(KeelteKooli.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            var roleManager = new RoleManager<IdentityRole>(
+                new RoleStore<IdentityRole>(context));
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method
-            //  to avoid creating duplicate seed data.
+            string[] roles = { "Admin", "Teacher", "Student" };
+
+            foreach (var role in roles)
+            {
+                if (!roleManager.RoleExists(role))
+                {
+                    roleManager.Create(new IdentityRole(role));
+                }
+            }
+
+            var userManager = new UserManager<ApplicationUser>(
+            new UserStore<ApplicationUser>(context));
+
+            var teacherUser = userManager.FindByEmail("teacher@test.ee");
+
+            if (teacherUser == null)
+            {
+                teacherUser = new ApplicationUser
+                {
+                    UserName = "teacher@test.ee",
+                    Email = "teacher@test.ee"
+                };
+
+                userManager.Create(teacherUser, "Test123!");
+                userManager.AddToRole(teacherUser.Id, "Teacher");
+            }
+
+            if (!context.Teachers.Any(t => t.ApplicationUserId == teacherUser.Id))
+            {
+                context.Teachers.Add(new Teacher
+                {
+                    Nimi = "Test Õpetaja",
+                    Kvalifikatsioon = "C1",
+                    ApplicationUserId = teacherUser.Id
+                });
+
+                context.SaveChanges();
+            }
         }
+
     }
 }
