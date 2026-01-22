@@ -11,13 +11,16 @@ namespace KeelteKooli.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Nimi { get; set; }
 
-        public string Qualification { get; set; }
-        public string PhotoPath { get; set; }
+        public string Kvalifikatsioon { get; set; }
+        public string FotoPath { get; set; }
 
         public string ApplicationUserId { get; set; }
-        public virtual ApplicationUser User { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
+        public ICollection<Training> Trainings { get; set; }
+
     }
 
 }

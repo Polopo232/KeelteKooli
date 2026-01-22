@@ -8,12 +8,13 @@ namespace KeelteKooli.Models
     public class Registration
     {
         public int Id { get; set; }
-        public int TrainingId { get; set; }
+        public int KoolitusId { get; set; }
         public string ApplicationUserId { get; set; }
-        public string Status { get; set; } // Ootel / Kinnitatud / Tühistatud
+        public string Staatus { get; set; }
 
+        public int TrainingId { get; set; }
         public virtual Training Training { get; set; }
-        public virtual ApplicationUser User { get; set; }
+
     }
 
 }

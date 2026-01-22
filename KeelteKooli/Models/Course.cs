@@ -8,10 +8,10 @@ namespace KeelteKooli.Models
     public class Course
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Language { get; set; }
-        public string Level { get; set; } // A1-C2
-        public string Description { get; set; }
+        public string Nimetus { get; set; }
+        public string Keel { get; set; }
+        public string Tase { get; set; }
+        public string Kirjeldus { get; set; }
 
         public virtual ICollection<Training> Trainings { get; set; }
     }
