@@ -171,6 +171,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\TrainingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -179,21 +180,9 @@
     <Compile Include="Migrations\202601220831518_InitialCreate.Designer.cs">
       <DependentUpon>202601220831518_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202601220851541_AddRegistrationsToTraining.cs" />
-    <Compile Include="Migrations\202601220851541_AddRegistrationsToTraining.Designer.cs">
-      <DependentUpon>202601220851541_AddRegistrationsToTraining.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202601220859004_AddRegistrationsToTraining1.cs" />
-    <Compile Include="Migrations\202601220859004_AddRegistrationsToTraining1.Designer.cs">
-      <DependentUpon>202601220859004_AddRegistrationsToTraining1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202601220901454_AddRegistrationsToTraining2.cs" />
-    <Compile Include="Migrations\202601220901454_AddRegistrationsToTraining2.Designer.cs">
-      <DependentUpon>202601220901454_AddRegistrationsToTraining2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202601220904150_AddRegistrationsToTraining3.cs" />
-    <Compile Include="Migrations\202601220904150_AddRegistrationsToTraining3.Designer.cs">
-      <DependentUpon>202601220904150_AddRegistrationsToTraining3.cs</DependentUpon>
+    <Compile Include="Migrations\202601220920094_AddRegistrationsToTraining.cs" />
+    <Compile Include="Migrations\202601220920094_AddRegistrationsToTraining.Designer.cs">
+      <DependentUpon>202601220920094_AddRegistrationsToTraining.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -278,9 +267,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Trainings\Index.cshtml" />
+    <Content Include="Views\Trainings\MyCourses.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Teacher\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -313,17 +304,8 @@
     <EmbeddedResource Include="Migrations\202601220831518_InitialCreate.resx">
       <DependentUpon>202601220831518_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202601220851541_AddRegistrationsToTraining.resx">
-      <DependentUpon>202601220851541_AddRegistrationsToTraining.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202601220859004_AddRegistrationsToTraining1.resx">
-      <DependentUpon>202601220859004_AddRegistrationsToTraining1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202601220901454_AddRegistrationsToTraining2.resx">
-      <DependentUpon>202601220901454_AddRegistrationsToTraining2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202601220904150_AddRegistrationsToTraining3.resx">
-      <DependentUpon>202601220904150_AddRegistrationsToTraining3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202601220920094_AddRegistrationsToTraining.resx">
+      <DependentUpon>202601220920094_AddRegistrationsToTraining.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
