@@ -21,7 +21,7 @@ namespace KeelteKooli.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Training> Trainings { get; set; }
+        public DbSet<Training> Training { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Registration> Registrations { get; set; }
 
