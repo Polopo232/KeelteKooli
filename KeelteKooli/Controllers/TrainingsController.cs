@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿    using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
 using KeelteKooli.Models;
@@ -10,7 +10,7 @@ public class TrainingsController : Controller
 
     public ActionResult Index()
     {
-        var trainings = db.Trainings
+        var trainings = db.Training
             .Include(t => t.Course)
             .Include(t => t.Teacher)
             .Include(t => t.Registrations)
@@ -19,7 +19,8 @@ public class TrainingsController : Controller
         return View(trainings);
     }
 
-    [Authorize(Roles = "Student")]
+
+[Authorize(Roles = "Student")]
     public ActionResult Register(int id)
     {
         string userId = User.Identity.GetUserId();
@@ -62,6 +63,36 @@ public class TrainingsController : Controller
         return View(myTrainings);
     }
 
+    public ActionResult Create()
+    {
+        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi");
+        ViewBag.CourseId = new SelectList(db.Courses, "Id", "Nimetus");
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Create(Training training)
+    {
+        if (ModelState.IsValid)
+        {
+            var course = new Course { Nimetus = training.CourseName };
+            db.Courses.Add(course);
+
+
+            training.Course = course;
+
+
+            db.Training.Add(training);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi", training.TeacherId);
+        ViewBag.CourseId = new SelectList(db.Courses, "Id", "Nimetus", training.CourseName);
+        return View(training);
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
@@ -71,3 +102,4 @@ public class TrainingsController : Controller
         base.Dispose(disposing);
     }
 }
+    
