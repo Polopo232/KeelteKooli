@@ -4,6 +4,14 @@
     ViewBag.Title = "Dashboard";
 }
 
+@if (Model == null)
+{
+    <div class="alert alert-danger">
+        Õpetaja profiili ei leitud.
+    </div>
+    return;
+}
+    
 <h2>@Model.Nimi - Minu kursused</h2>
 
 @foreach (var t in Model.Trainings)
