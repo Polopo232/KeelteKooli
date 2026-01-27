@@ -176,17 +176,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202601220831518_InitialCreate.cs" />
-    <Compile Include="Migrations\202601220831518_InitialCreate.Designer.cs">
-      <DependentUpon>202601220831518_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202601220920094_AddRegistrationsToTraining.cs" />
-    <Compile Include="Migrations\202601220920094_AddRegistrationsToTraining.Designer.cs">
-      <DependentUpon>202601220920094_AddRegistrationsToTraining.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202601220926517_FixTeacherTraining.cs" />
-    <Compile Include="Migrations\202601220926517_FixTeacherTraining.Designer.cs">
-      <DependentUpon>202601220926517_FixTeacherTraining.cs</DependentUpon>
+    <Compile Include="Migrations\202601271211276_InitialCreate.cs" />
+    <Compile Include="Migrations\202601271211276_InitialCreate.Designer.cs">
+      <DependentUpon>202601271211276_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -273,6 +265,7 @@
     <Content Include="Views\Trainings\Index.cshtml" />
     <Content Include="Views\Trainings\MyCourses.cshtml" />
     <Content Include="Views\Teacher\Dashboard.cshtml" />
+    <Content Include="Views\Trainings\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -305,14 +298,8 @@
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202601220831518_InitialCreate.resx">
-      <DependentUpon>202601220831518_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202601220920094_AddRegistrationsToTraining.resx">
-      <DependentUpon>202601220920094_AddRegistrationsToTraining.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202601220926517_FixTeacherTraining.resx">
-      <DependentUpon>202601220926517_FixTeacherTraining.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202601271211276_InitialCreate.resx">
+      <DependentUpon>202601271211276_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
