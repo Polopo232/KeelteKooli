@@ -4,29 +4,48 @@
     ViewBag.Title = "Kursused";
 }
 
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a class="btn btn-success" href="@Url.Action("Create", "Trainings")">
+            + Lisa kursus
+        </a>
+    </p>
+}
+
 <div class="row">
     @foreach (var t in Model)
     {
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">@t.Course.Nimetus</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@t.Teacher.Nimi</h6>
-                    <p class="card-text">
-                        @t.Course.Keel - @t.Course.Tase <br />
+                    <h5 class="card-title">@((t.Course?.Nimetus) ?? "Kursus puudub")</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@((t.Teacher?.Nimi) ?? "Õpetaja puudub")</h6>
+                    <p>
+                        @((t.Course?.Keel ?? "-") + " - " + (t.Course?.Tase ?? "-")) <br />
                         @t.Hind € <br />
                         Algus: @t.AlgusKuupaev.ToShortDateString() <br />
                         Lõpp: @t.LoppKuupaev.ToShortDateString()
                     </p>
 
-                    @if (t.Registrations != null && t.Registrations.Count >= t.MaxOsalejaid)
+                    @if (User.IsInRole("Admin"))
                     {
-                        <span class="badge bg-danger">Rühm täis</span>
+                        <a href="@Url.Action("Edit", "Trainings", new { id = t.Id })"
+                           class="btn btn-warning mb-1">Muuda</a>
+                        <a href="@Url.Action("Delete", "Trainings", new { id = t.Id })"
+                           class="btn btn-danger mb-1">Kustuta</a>
                     }
                     else
                     {
-                        <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
-                           class="btn btn-primary">Registreeru</a>
+                        if (t.Registrations?.Count < t.MaxOsalejaid)
+                        {
+                            <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
+                               class="btn btn-primary">Registreeru</a>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Rühm täis</span>
+                        }
                     }
                 </div>
             </div>
