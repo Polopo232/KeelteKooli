@@ -35,7 +35,7 @@
                         <a href="@Url.Action("Delete", "Trainings", new { id = t.Id })"
                            class="btn btn-danger mb-1">Kustuta</a>
                     }
-                    else
+                    @if (User.IsInRole("Student"))
                     {
                         if (t.Registrations?.Count < t.MaxOsalejaid)
                         {
@@ -47,6 +47,13 @@
                             <span class="badge bg-danger">Rühm täis</span>
                         }
                     }
+                    else if (User.IsInRole("Teacher"))
+                    {
+                        <span class="text-muted fst-italic">
+                            Ainult vaatamiseks
+                        </span>
+                    }
+
                 </div>
             </div>
         </div>

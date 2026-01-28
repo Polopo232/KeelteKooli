@@ -14,13 +14,23 @@ public class TrainingsController : Controller
             .Include(t => t.Course)
             .Include(t => t.Teacher)
             .Include(t => t.Registrations)
-            .ToList();
+            .AsQueryable();
 
-        return View(trainings);
+        if (User.IsInRole("Student"))
+        {
+            string userId = User.Identity.GetUserId();
+
+            trainings = trainings
+                .Where(t => !t.Registrations
+                    .Any(r => r.ApplicationUserId == userId));
+        }
+
+        return View(trainings.ToList());
     }
 
 
-[Authorize(Roles = "Student")]
+
+    [Authorize(Roles = "Student")]
     public ActionResult Register(int id)
     {
         string userId = User.Identity.GetUserId();
