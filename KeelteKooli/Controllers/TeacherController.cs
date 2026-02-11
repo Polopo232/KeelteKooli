@@ -31,7 +31,7 @@ public class TeacherController : Controller
         if (ModelState.IsValid)
         {
             training.Course = new Course { Nimetus = training.CourseName };
-            db.Training.Add(training);
+            db.Trainings.Add(training);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

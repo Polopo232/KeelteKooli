@@ -10,7 +10,7 @@ public class TrainingsController : Controller
 
     public ActionResult Index()
     {
-        var trainings = db.Training
+        var trainings = db.Trainings
             .Include(t => t.Course)
             .Include(t => t.Teacher)
             .Include(t => t.Registrations)
@@ -93,7 +93,7 @@ public class TrainingsController : Controller
             training.Course = course;
 
 
-            db.Training.Add(training);
+            db.Trainings.Add(training);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
