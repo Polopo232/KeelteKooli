@@ -180,6 +180,10 @@
     <Compile Include="Migrations\202601280831024_InitCreate.Designer.cs">
       <DependentUpon>202601280831024_InitCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202602111231220_Database.cs" />
+    <Compile Include="Migrations\202602111231220_Database.Designer.cs">
+      <DependentUpon>202602111231220_Database.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -300,6 +304,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202601280831024_InitCreate.resx">
       <DependentUpon>202601280831024_InitCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602111231220_Database.resx">
+      <DependentUpon>202602111231220_Database.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
