@@ -21,16 +21,12 @@
                     <li>@Html.ActionLink("Avaleht", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Meist", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Kursused", "Index", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
 
                     @if (User.IsInRole("Student"))
                     {
                         <li>@Html.ActionLink("Minu kursused", "MyCourses", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Kursustele registreerimine", "Index", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
-                    }
-
-                    @if (User.IsInRole("Teacher"))
-                    {
-                        <li>@Html.ActionLink("Minu kursused", "Index", "Trainings", new { area = "" }, new { @class = "nav-link" })</li>
                     }
 
                     @if (User.IsInRole("Admin"))
