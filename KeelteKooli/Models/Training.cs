@@ -1,8 +1,7 @@
-﻿using System;
+﻿using KeelteKooli.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace KeelteKooli.Models
 {
@@ -13,8 +12,13 @@ namespace KeelteKooli.Models
         [Display(Name = "Kursuse nimetus")]
         public string CourseName { get; set; }
 
-        public int TeacherId { get; set; }
+        [Display(Name = "Keel")]
+        public string CourseKeel { get; set; }
 
+        [Display(Name = "Tase")]
+        public string CourseTase { get; set; }
+
+        public int TeacherId { get; set; }
 
         public DateTime AlgusKuupaev { get; set; }
         public DateTime LoppKuupaev { get; set; }
@@ -27,3 +31,4 @@ namespace KeelteKooli.Models
         public virtual ICollection<Registration> Registrations { get; set; } = new List<Registration>();
     }
 }
+

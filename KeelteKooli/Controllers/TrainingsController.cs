@@ -1,4 +1,4 @@
-﻿    using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
 using KeelteKooli.Models;
@@ -89,22 +89,28 @@ public class TrainingsController : Controller
     {
         if (ModelState.IsValid)
         {
-            var course = new Course { Nimetus = training.CourseName };
-            db.Courses.Add(course);
+            var course = new Course
+            {
+                Nimetus = training.CourseName,
+                Keel = training.CourseKeel,
+                Tase = training.CourseTase
+            };
 
+            db.Courses.Add(course);
+            db.SaveChanges();
 
             training.Course = course;
 
-
             db.Trainings.Add(training);
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 
         ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi", training.TeacherId);
-        ViewBag.CourseId = new SelectList(db.Courses, "Id", "Nimetus", training.CourseName);
         return View(training);
     }
+
 
     protected override void Dispose(bool disposing)
     {
