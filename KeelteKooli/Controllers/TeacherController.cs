@@ -14,7 +14,7 @@ public class TeacherController : Controller
         string userId = User.Identity.GetUserId();
 
         var teacher = db.Teachers
-            .Include(t => t.Trainings.Select(tr => tr.Registrations.Select(r => r.User)))
+            .Include(t => t.Trainings.Select(tr => tr.Registrations.Select(r => r.ApplicationUser)))
             .Include(t => t.Trainings.Select(tr => tr.Course))
             .FirstOrDefault(t => t.ApplicationUserId == userId);
 
