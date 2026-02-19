@@ -1,14 +1,11 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@model IEnumerable<KeelteKooli.Models.Training>
+
 @using KeelteKooli.Models
-
-
-@model IEnumerable<KeelteKooli.Models.Training>
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "Kursused";
 }
-
-
 
 <h2>Kursused registreerimiseks</h2>
 
@@ -24,16 +21,23 @@
 <div class="row">
     @foreach (var t in Model)
     {
+        var kinnitatudCount = t.Registrations?
+            .Count(r => r.Staatus == RegistrationStatus.Kinnitatud) ?? 0;
+        var remainingSeats = t.MaxOsalejaid - kinnitatudCount;
+
         <div class="col-md-4 mb-3">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">@((t.Course?.Nimetus) ?? "Kursus puudub")</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@((t.Teacher?.Nimi) ?? "Õpetaja puudub")</h6>
                     <p>
-                        @((t.Course?.Keel ?? "-") + " - " + (t.Course?.Tase ?? "-")) <br />
-                        @t.Hind € <br />
-                        Algus: @t.AlgusKuupaev.ToShortDateString() <br />
-                        Lõpp: @t.LoppKuupaev.ToShortDateString()
+                        <strong>Keel / tase:</strong> @((t.Course?.Keel ?? "-")) - @((t.Course?.Tase ?? "-")) <br />
+                        <strong>Hind:</strong> @t.Hind € <br />
+                        <strong>Algus:</strong> @t.AlgusKuupaev.ToShortDateString() <br />
+                        <strong>Lõpp:</strong> @t.LoppKuupaev.ToShortDateString() <br />
+                        <strong>Kohti kokku:</strong> @t.MaxOsalejaid <br />
+                        <strong>Registreerunud:</strong> @kinnitatudCount <br />
+                        <strong>Vabu kohti:</strong> @remainingSeats
                     </p>
 
                     @if (User.IsInRole("Admin"))
@@ -48,14 +52,11 @@
                     {
                         var userId = User.Identity.GetUserId();
                         var myRegistration = t.Registrations?
-                                    .FirstOrDefault(r => r.ApplicationUserId == userId);
-
-                        var kinnitatudCount = t.Registrations?
-                            .Count(r => r.Staatus == RegistrationStatus.Kinnitatud) ?? 0;
+                            .FirstOrDefault(r => r.ApplicationUserId == userId);
 
                         if (myRegistration == null)
                         {
-                            if (kinnitatudCount < t.MaxOsalejaid)
+                            if (remainingSeats > 0)
                             {
                                 <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
                                    class="btn btn-primary">Registreeru</a>

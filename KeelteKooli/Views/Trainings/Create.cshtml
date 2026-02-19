@@ -10,35 +10,51 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.CourseName, "Kursuse nimetus")
-        @Html.TextBoxFor(m => m.CourseName, new { @class = "form-control" })
+    <div class="mb-3">
+        @Html.LabelFor(m => m.CourseName)
+        @Html.TextBoxFor(m => m.CourseName, new { @class = "form-control", placeholder = "Kursuse nimetus" })
     </div>
 
-    <div class="form-group">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.CourseKeel, "Keel")
+            @Html.TextBoxFor(m => m.CourseKeel, new { @class = "form-control", placeholder = "Näiteks: Saksa" })
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.CourseTase, "Tase")
+            @Html.DropDownListFor(m => m.CourseTase,
+                     new SelectList(new[] { "A1", "A2", "B1", "B2", "C1", "C2" }),
+                     "-- vali tase --", new { @class = "form-select" })
+        </div>
+    </div>
+
+    <div class="mb-3">
         @Html.Label("Õpetaja")
-        @Html.DropDownList("TeacherId", null, "-- vali õpetaja --", new { @class = "form-control" })
+        @Html.DropDownListFor(m => m.TeacherId, (SelectList)ViewBag.TeacherId, "-- vali õpetaja --", new { @class = "form-select" })
     </div>
 
-    <div class="form-group">
-        @Html.Label("Alguskuupäev")
-        @Html.TextBoxFor(m => m.AlgusKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+    <div class="row mb-3">
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.AlgusKuupaev, "Alguskuupäev")
+            @Html.TextBoxFor(m => m.AlgusKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.LoppKuupaev, "Lõppkuupäev")
+            @Html.TextBoxFor(m => m.LoppKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        </div>
     </div>
 
-    <div class="form-group">
-        @Html.Label("Lõppkuupäev")
-        @Html.TextBoxFor(m => m.LoppKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Hind (€)")
-        @Html.TextBoxFor(m => m.Hind, new { @class = "form-control", placeholder = "Sisesta hind" })
-    </div>
-
-    <div class="form-group">
-        @Html.Label("Maksimaalne osalejate arv")
-        @Html.TextBoxFor(m => m.MaxOsalejaid, new { @class = "form-control", placeholder = "Sisesta arv" })
+    <div class="row mb-3">
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.Hind, "Hind (€)")
+            @Html.TextBoxFor(m => m.Hind, new { @class = "form-control", placeholder = "Sisesta hind" })
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(m => m.MaxOsalejaid, "Maksimaalne osalejate arv")
+            @Html.TextBoxFor(m => m.MaxOsalejaid, new { @class = "form-control", placeholder = "Sisesta arv" })
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Salvesta</button>
+    <a href="@Url.Action("Index", "Trainings")" class="btn btn-secondary ms-2">Tagasi</a>
 }
