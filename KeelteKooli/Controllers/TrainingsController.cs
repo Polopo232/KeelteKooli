@@ -22,7 +22,8 @@ public class TrainingsController : Controller
 
             trainings = trainings
                 .Where(t => !t.Registrations
-                    .Any(r => r.ApplicationUserId == userId));
+                    .Any(r => r.ApplicationUserId == userId &&
+                              r.Staatus != RegistrationStatus.Tuhistatud));
         }
 
         return View(trainings.ToList());
@@ -37,7 +38,9 @@ public class TrainingsController : Controller
 
         bool exists = db.Registrations.Any(r =>
             r.TrainingId == id &&
-            r.ApplicationUserId == userId);
+            r.ApplicationUserId == userId &&
+            r.Staatus != RegistrationStatus.Tuhistatud);
+
 
         if (exists)
         {
@@ -49,7 +52,7 @@ public class TrainingsController : Controller
         {
             TrainingId = id,
             ApplicationUserId = userId,
-            Staatus = "Pending"
+            Staatus = RegistrationStatus.Ootel
         });
 
         db.SaveChanges();
@@ -64,7 +67,7 @@ public class TrainingsController : Controller
         string userId = User.Identity.GetUserId();
 
         var myTrainings = db.Registrations
-            .Where(r => r.ApplicationUserId == userId)
+            .Where(r => r.ApplicationUserId == userId && r.Staatus == RegistrationStatus.Kinnitatud)
             .Include(r => r.Training.Course)
             .Include(r => r.Training.Teacher)
             .Select(r => r.Training)

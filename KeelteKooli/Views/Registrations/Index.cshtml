@@ -1,0 +1,26 @@
+﻿@model IEnumerable<KeelteKooli.Models.Registration>
+
+<h2>Ootel registreerimised</h2>
+
+<table class="table">
+    <tr>
+        <th>Õpilane</th>
+        <th>Koolitus</th>
+        <th>Tegevus</th>
+    </tr>
+
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.ApplicationUser.Email</td>
+            <td>@r.Training.Id</td>
+            <td>
+                <a href="@Url.Action("Approve", new { id = r.Id })"
+                   class="btn btn-success">Kinnita</a>
+
+                <a href="@Url.Action("Cancel", new { id = r.Id })"
+                   class="btn btn-danger">Tühista</a>
+            </td>
+        </tr>
+    }
+</table>

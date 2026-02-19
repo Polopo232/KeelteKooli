@@ -1,22 +1,31 @@
-﻿using KeelteKooli.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Registration
+namespace KeelteKooli.Models
 {
-    public int Id { get; set; }
+    public enum RegistrationStatus
+    {
+        Ootel = 0,
+        Kinnitatud = 1,
+        Tuhistatud = 2
+    }
 
-    [Required]
-    public int TrainingId { get; set; }
+    public class Registration
+    {
+        public int Id { get; set; }
 
-    [Required]
-    public string ApplicationUserId { get; set; }
+        [Required]
+        public int TrainingId { get; set; }
 
-    public string Staatus { get; set; }
+        [ForeignKey("TrainingId")]
+        public virtual Training Training { get; set; }
 
-    [ForeignKey("TrainingId")]
-    public virtual Training Training { get; set; }
+        [Required]
+        public string ApplicationUserId { get; set; }
 
-    [ForeignKey("ApplicationUserId")]
-    public virtual ApplicationUser User { get; set; }
+        [ForeignKey("ApplicationUserId")]
+        public virtual ApplicationUser ApplicationUser { get; set; }
+
+        public RegistrationStatus Staatus { get; set; } = RegistrationStatus.Ootel;
+    }
 }
