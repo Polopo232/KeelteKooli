@@ -1,8 +1,14 @@
-﻿@model IEnumerable<KeelteKooli.Models.Training>
+﻿@using Microsoft.AspNet.Identity
+@using KeelteKooli.Models
+
+
+@model IEnumerable<KeelteKooli.Models.Training>
 
 @{
     ViewBag.Title = "Kursused";
 }
+
+
 
 <h2>Kursused registreerimiseks</h2>
 
@@ -37,16 +43,33 @@
                         <a href="@Url.Action("Delete", "Trainings", new { id = t.Id })"
                            class="btn btn-danger mb-1">Kustuta</a>
                     }
+
                     @if (User.IsInRole("Student"))
                     {
-                        if (t.Registrations?.Count < t.MaxOsalejaid)
+                        var userId = User.Identity.GetUserId();
+                        var myRegistration = t.Registrations?
+                                    .FirstOrDefault(r => r.ApplicationUserId == userId);
+
+                        var kinnitatudCount = t.Registrations?
+                            .Count(r => r.Staatus == RegistrationStatus.Kinnitatud) ?? 0;
+
+                        if (myRegistration == null)
                         {
-                            <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
-                               class="btn btn-primary">Registreeru</a>
+                            if (kinnitatudCount < t.MaxOsalejaid)
+                            {
+                                <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
+                                   class="btn btn-primary">Registreeru</a>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Rühm täis</span>
+                            }
                         }
                         else
                         {
-                            <span class="badge bg-danger">Rühm täis</span>
+                            <span class="badge @(myRegistration.Staatus == RegistrationStatus.Ootel ? "bg-warning" : "bg-success")">
+                                @myRegistration.Staatus
+                            </span>
                         }
                     }
                     else if (User.IsInRole("Teacher"))
