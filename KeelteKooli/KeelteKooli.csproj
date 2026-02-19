@@ -179,6 +179,18 @@
     <Compile Include="Migrations\202602111231220_Database.Designer.cs">
       <DependentUpon>202602111231220_Database.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202602191229007_Kruto.cs" />
+    <Compile Include="Migrations\202602191229007_Kruto.Designer.cs">
+      <DependentUpon>202602191229007_Kruto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202602191249541_Kruto2.cs" />
+    <Compile Include="Migrations\202602191249541_Kruto2.Designer.cs">
+      <DependentUpon>202602191249541_Kruto2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202602191349055_Kruto3.cs" />
+    <Compile Include="Migrations\202602191349055_Kruto3.Designer.cs">
+      <DependentUpon>202602191349055_Kruto3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -265,10 +277,10 @@
     <Content Include="Views\Trainings\MyCourses.cshtml" />
     <Content Include="Views\Teacher\Dashboard.cshtml" />
     <Content Include="Views\Trainings\Create.cshtml" />
+    <Content Include="Views\Registrations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Registrations\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202601280831024_InitCreate.resx">
@@ -276,6 +288,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202602111231220_Database.resx">
       <DependentUpon>202602111231220_Database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602191229007_Kruto.resx">
+      <DependentUpon>202602191229007_Kruto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602191249541_Kruto2.resx">
+      <DependentUpon>202602191249541_Kruto2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602191349055_Kruto3.resx">
+      <DependentUpon>202602191349055_Kruto3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
