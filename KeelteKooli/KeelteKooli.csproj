@@ -191,6 +191,18 @@
     <Compile Include="Migrations\202602191349055_Kruto3.Designer.cs">
       <DependentUpon>202602191349055_Kruto3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202603041237119_KrutoiOchen.cs" />
+    <Compile Include="Migrations\202603041237119_KrutoiOchen.Designer.cs">
+      <DependentUpon>202603041237119_KrutoiOchen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202603041321435_KrutoiOchen1.cs" />
+    <Compile Include="Migrations\202603041321435_KrutoiOchen1.Designer.cs">
+      <DependentUpon>202603041321435_KrutoiOchen1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202603041335481_AddCourseTeacherToTraining.cs" />
+    <Compile Include="Migrations\202603041335481_AddCourseTeacherToTraining.Designer.cs">
+      <DependentUpon>202603041335481_AddCourseTeacherToTraining.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -297,6 +309,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202602191349055_Kruto3.resx">
       <DependentUpon>202602191349055_Kruto3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202603041237119_KrutoiOchen.resx">
+      <DependentUpon>202603041237119_KrutoiOchen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202603041321435_KrutoiOchen1.resx">
+      <DependentUpon>202603041321435_KrutoiOchen1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202603041335481_AddCourseTeacherToTraining.resx">
+      <DependentUpon>202603041335481_AddCourseTeacherToTraining.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
