@@ -16,7 +16,6 @@ namespace KeelteKooli.Controllers
             var registrations = db.Registrations
                 .Include("ApplicationUser")
                 .Include("Training")
-                .Where(r => r.Staatus == RegistrationStatus.Ootel)
                 .ToList();
 
             return View(registrations);

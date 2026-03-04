@@ -4,22 +4,25 @@ using KeelteKooli.Models;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 
-[Authorize(Roles = "Admin")]
+
 public class TeacherController : Controller
 {
     private ApplicationDbContext db = new ApplicationDbContext();
 
     public ActionResult Dashboard()
     {
-        string userId = User.Identity.GetUserId();
+        var userId = User.Identity.GetUserId();
 
         var teacher = db.Teachers
-            .Include(t => t.Trainings.Select(tr => tr.Registrations.Select(r => r.ApplicationUser)))
-            .Include(t => t.Trainings.Select(tr => tr.Course))
+            .Include("Trainings")
+            .Include("Trainings.Course")
+            .Include("Trainings.Registrations")
+            .Include("Trainings.Registrations.ApplicationUser")
             .FirstOrDefault(t => t.ApplicationUserId == userId);
 
         return View(teacher);
     }
+
     public ActionResult Create()
     {
         ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi");
