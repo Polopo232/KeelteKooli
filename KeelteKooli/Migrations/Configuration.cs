@@ -34,30 +34,80 @@
                 new UserStore<ApplicationUser>(context));
 
             // ----- Teacher -----
-            var teacherUser = userManager.FindByEmail("teacher@test.ee");
+
+            // 2. Создаём тестового пользователя
+            var teacherEmail = "teacher@test.ee";
+            var teacherUser = userManager.FindByEmail(teacherEmail);
+
             if (teacherUser == null)
             {
                 teacherUser = new ApplicationUser
                 {
-                    UserName = "teacher@test.ee",
-                    Email = "teacher@test.ee"
+                    UserName = teacherEmail,
+                    Email = teacherEmail
                 };
 
                 userManager.Create(teacherUser, "Test123!");
+            }
+
+            // 3. Добавляем пользователя в роль Teacher
+            if (!userManager.IsInRole(teacherUser.Id, "Teacher"))
+            {
                 userManager.AddToRole(teacherUser.Id, "Teacher");
             }
 
-            if (!context.Teachers.Any(t => t.ApplicationUserId == teacherUser.Id))
+            // 4. Создаём запись в таблице Teachers
+            var teacher = context.Teachers.FirstOrDefault(t => t.ApplicationUserId == teacherUser.Id);
+
+            if (teacher == null)
             {
-                context.Teachers.Add(new Teacher
+                teacher = new Teacher
                 {
                     Nimi = "Test Õpetaja",
                     Kvalifikatsioon = "C1",
                     ApplicationUserId = teacherUser.Id
-                });
+                };
+
+                context.Teachers.Add(teacher);
                 context.SaveChanges();
             }
 
+            // 5. Создаём тестовый курс (Course)
+            var course = context.Courses.FirstOrDefault(c => c.Nimetus == "Testkursus");
+
+            if (course == null)
+            {
+                course = new Course
+                {
+                    Nimetus = "Testkursus",
+                    Keel = "Inglise",
+                    Tase = "A2"
+                };
+
+                context.Courses.Add(course);
+                context.SaveChanges();
+            }
+
+
+            // 6. Создаём Training и привязываем к õpetaja
+            var training = context.Trainings
+                .FirstOrDefault(t => t.CourseId == course.Id && t.TeacherId == teacher.Id);
+
+            if (training == null)
+            {
+                training = new Training
+                {
+                    CourseId = course.Id,
+                    TeacherId = teacher.Id,
+                    AlgusKuupaev = DateTime.Now.AddDays(7),
+                    LoppKuupaev = DateTime.Now.AddMonths(1),
+                    MaxOsalejaid = 10,
+                    Hind = 120
+                };
+
+                context.Trainings.Add(training);
+                context.SaveChanges();
+            }
             // ----- Admin -----
             var adminUser = userManager.FindByEmail("admin@test.ee");
             if (adminUser == null)
