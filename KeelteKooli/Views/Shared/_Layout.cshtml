@@ -34,6 +34,11 @@
                         <li>@Html.ActionLink("Õpetajad", "Dashboard", "Teacher", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Registreeringud", "Index", "Registrations", new { area = "" }, new { @class = "nav-link" })</li>
                     }
+
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        <li>@Html.ActionLink("Õpetajad", "Dashboard", "Teacher", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
                 </ul>
 
                 @Html.Partial("_LoginPartial")

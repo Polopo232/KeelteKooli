@@ -1,4 +1,5 @@
-﻿@model IEnumerable<KeelteKooli.Models.Registration>
+﻿@using KeelteKooli.Models
+@model IEnumerable<KeelteKooli.Models.Registration>
 
 <h2>Ootel registreerimised</h2>
 
@@ -9,17 +10,40 @@
         <th>Tegevus</th>
     </tr>
 
-    @foreach (var r in Model)
+    @foreach (var r in Model.Where(x => x.Staatus == RegistrationStatus.Ootel))
     {
-        <tr>
+        <tr id="row-@r.Id">
             <td>@r.ApplicationUser.Email</td>
-            <td>@r.Training.Id</td>
+            <td>@r.Training.CourseName</td>
             <td>
                 <a href="@Url.Action("Approve", new { id = r.Id })"
                    class="btn btn-success">Kinnita</a>
 
                 <a href="@Url.Action("Cancel", new { id = r.Id })"
                    class="btn btn-danger">Tühista</a>
+            </td>
+        </tr>
+    }
+</table>
+
+<hr />
+
+<h2>Kinnitatud ja tühistatud</h2>
+
+<table class="table" id="completed-table">
+    <tr>
+        <th>Õpilane</th>
+        <th>Koolitus</th>
+        <th>Staatus</th>
+    </tr>
+
+    @foreach (var r in Model.Where(x => x.Staatus != RegistrationStatus.Ootel))
+    {
+        <tr>
+            <td>@r.ApplicationUser.Email</td>
+            <td>@r.Training.CourseName</td>
+            <td>
+                @(r.Staatus == RegistrationStatus.Kinnitatud ? "Kinnitatud" : "Tühistatud")
             </td>
         </tr>
     }
