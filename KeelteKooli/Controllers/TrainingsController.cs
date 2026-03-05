@@ -107,8 +107,8 @@ public class TrainingsController : Controller
             return RedirectToAction("Index");
         }
 
-        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi", training.TeacherId);
-        return View(training);
+        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi");
+        return View();
     }
 
 

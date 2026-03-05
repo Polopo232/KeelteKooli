@@ -9,34 +9,69 @@ public class TeacherController : Controller
 {
     private ApplicationDbContext db = new ApplicationDbContext();
 
+    [Authorize(Roles = "Admin")]
     public ActionResult Dashboard()
     {
-        var userId = User.Identity.GetUserId();
+        var teachers = db.Teachers.ToList();
+        return View(teachers);
+    }
 
-        var teacher = db.Teachers
-            .Include("Trainings")
-            .Include("Trainings.Course")
-            .Include("Trainings.Registrations")
-            .Include("Trainings.Registrations.ApplicationUser")
-            .FirstOrDefault(t => t.ApplicationUserId == userId);
-
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Create(Teacher teacher)
+    {
+        if (ModelState.IsValid)
+        {
+            db.Teachers.Add(teacher);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
         return View(teacher);
     }
 
-    public ActionResult Create()
+    // 1. Открывает пустую форму (GET)
+    [HttpGet]
+    public ActionResult CreateProfile()
     {
-        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi");
+        ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "UserName");
         return View();
     }
 
-    public ActionResult Create(Training training)
+    // 2. Обрабатывает нажатие кнопки "Salvesta" (POST)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult CreateProfile(Teacher teacher)
+    {
+        if (ModelState.IsValid)
+        {
+            db.Teachers.Add(teacher);
+            db.SaveChanges();
+            return RedirectToAction("Dashboard");
+        }
+
+        // Если была ошибка (например, имя пустое), возвращаем список пользователей снова
+        ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "UserName");
+        return View(teacher);
+    }
+
+    // Удалите старый метод ActionResult Create(Teacher teacher), он больше не нужен
+
+    public ActionResult CreateTraining()
+    {
+        ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "UserName");
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult CreateTraining(Training training)
     {
         if (ModelState.IsValid)
         {
             training.Course = new Course { Nimetus = training.CourseName };
             db.Trainings.Add(training);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Trainings");
         }
 
         ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi", training.TeacherId);

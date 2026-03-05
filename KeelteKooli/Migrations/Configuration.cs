@@ -63,7 +63,7 @@
             {
                 teacher = new Teacher
                 {
-                    Nimi = "Test Õpetaja",
+                    Nimi = "Mari Speek",
                     Kvalifikatsioon = "C1",
                     ApplicationUserId = teacherUser.Id
                 };
@@ -73,15 +73,15 @@
             }
 
             // 5. Создаём тестовый курс (Course)
-            var course = context.Courses.FirstOrDefault(c => c.Nimetus == "Testkursus");
+            var course = context.Courses.FirstOrDefault(c => c.Nimetus == "Eesti B2");
 
             if (course == null)
             {
                 course = new Course
                 {
-                    Nimetus = "Testkursus",
-                    Keel = "Inglise",
-                    Tase = "A2"
+                    Nimetus = "Eesti B2",
+                    Keel = "Eesti",
+                    Tase = "B2"
                 };
 
                 context.Courses.Add(course);
