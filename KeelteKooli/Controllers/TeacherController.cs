@@ -1,8 +1,11 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using KeelteKooli.Models;
-using System.Data.Entity;
+﻿using KeelteKooli.Models;
 using Microsoft.AspNet.Identity;
+using System;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 
 public class TeacherController : Controller
@@ -16,20 +19,6 @@ public class TeacherController : Controller
         return View(teachers);
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Create(Teacher teacher)
-    {
-        if (ModelState.IsValid)
-        {
-            db.Teachers.Add(teacher);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-        return View(teacher);
-    }
-
-    // 1. Открывает пустую форму (GET)
     [HttpGet]
     public ActionResult CreateProfile()
     {
@@ -37,24 +26,52 @@ public class TeacherController : Controller
         return View();
     }
 
-    // 2. Обрабатывает нажатие кнопки "Salvesta" (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult CreateProfile(Teacher teacher)
+    public ActionResult CreateProfile(Teacher teacher, HttpPostedFileBase upload)
     {
         if (ModelState.IsValid)
         {
+            if (upload != null && upload.ContentLength > 0)
+            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
+                string path = Path.Combine(Server.MapPath("~/Images/Teachers/"), fileName);
+
+                upload.SaveAs(path);
+
+                teacher.FotoPath = fileName;
+            }
+
             db.Teachers.Add(teacher);
             db.SaveChanges();
             return RedirectToAction("Dashboard");
         }
 
-        // Если была ошибка (например, имя пустое), возвращаем список пользователей снова
         ViewBag.Users = new SelectList(db.Users.ToList(), "Id", "UserName");
         return View(teacher);
     }
 
-    // Удалите старый метод ActionResult Create(Teacher teacher), он больше не нужен
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Delete(int id)
+    {
+        var teacher = db.Teachers.Find(id);
+        if (teacher != null)
+        {
+            if (!string.IsNullOrEmpty(teacher.FotoPath))
+            {
+                string fullPath = Server.MapPath("~/Images/Teachers/" + teacher.FotoPath);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
+
+            db.Teachers.Remove(teacher);
+            db.SaveChanges();
+        }
+        return RedirectToAction("Dashboard");
+    }
 
     public ActionResult CreateTraining()
     {

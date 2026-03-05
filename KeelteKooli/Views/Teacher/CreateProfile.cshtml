@@ -2,15 +2,19 @@
 
 <h2>Lisa uus õpetaja profiil</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("CreateProfile", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="card p-4 shadow-sm">
         <div class="mb-3">
             @Html.LabelFor(m => m.Nimi, "Õpetaja nimi")
-            @Html.TextBoxFor(m => m.Nimi, new { @class = "form-control", placeholder = "Sisesta ees- ja perekonnanimi" })
-            @Html.ValidationMessageFor(m => m.Nimi, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.Nimi, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Profiilipilt</label>
+            <input type="file" name="upload" class="form-control" accept="image/*" />
         </div>
 
         <div>

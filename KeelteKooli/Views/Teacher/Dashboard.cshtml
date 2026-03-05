@@ -1,40 +1,44 @@
 ﻿@model IEnumerable<KeelteKooli.Models.Teacher>
 
-@{
-    ViewBag.Title = "Õpetajate haldus";
-}
-
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Õpetajate profiilid</h2>
-    <a href="@Url.Action("CreateProfile", "Teacher")" class="btn btn-success">
-        <i class="bi bi-plus-lg"></i> Lisa uus õpetaja
-    </a>
+    <div>
+        <a href="@Url.Action("CreateProfile", "Teacher")" class="btn btn-success">Lisa õpetaja</a>
+        <a href="@Url.Action("Create", "Trainings")" class="btn btn-primary">Loo kursus</a>
+    </div>
 </div>
 
-<table class="table table-hover border">
-    <thead class="table-light">
-        <tr>
-            <th>Nimi</th>
-            <th>Kasutaja ID</th>
-            <th>Tegevused</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td><strong>@item.Nimi</strong></td>
-                <td>@item.ApplicationUserId</td>
-                <td>
-                    <span class="badge bg-info text-dark">Aktiivne</span>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<div class="mt-4">
-    <a href="@Url.Action("Create", "Trainings")" class="btn btn-primary">
-        Loo uus kursus (Vali õpetaja)
-    </a>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="text-center pt-4">
+                    @if (!string.IsNullOrEmpty(item.FotoPath))
+                    {
+                        <img src="~/Images/Teachers/@item.FotoPath" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover;" alt="@item.Nimi">
+                    }
+                    else
+                    {
+                        <img src="https://ui-avatars.com/api/?name=@item.Nimi&background=random&size=120" class="rounded-circle shadow" alt="no image">
+                    }
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-1">@item.Nimi</h5>
+                    <p class="text-muted small mb-3">ID: @(string.IsNullOrEmpty(item.ApplicationUserId) ? "Seostamata" : "Kasutaja olemas")</p>
+                    <span class="badge bg-success">Aktiivne</span>
+                </div>
+                <div class="card-footer bg-transparent border-0 text-center pb-4">
+                    @using (Html.BeginForm("Delete", "Teacher", new { id = item.Id }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Kas olete kindel, et soovite õpetaja @item.Nimi kustutada?');">
+                            Kustuta profiil
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 </div>
