@@ -1,37 +1,40 @@
-﻿@model KeelteKooli.Models.Teacher
+﻿@model IEnumerable<KeelteKooli.Models.Teacher>
 
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "Õpetajate haldus";
 }
 
-@if (Model == null)
-{
-    <div class="alert alert-danger">
-        Õpetaja profiili ei leitud.
-    </div>
-    return;
-}
-    
-<h2>@Model.Nimi - Minu kursused</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Õpetajate profiilid</h2>
+    <a href="@Url.Action("CreateProfile", "Teacher")" class="btn btn-success">
+        <i class="bi bi-plus-lg"></i> Lisa uus õpetaja
+    </a>
+</div>
 
-@foreach (var t in Model.Trainings)
-{
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>@t.Course.Nimetus</h5>
-            <p>
-                Algus: @t.AlgusKuupaev.ToShortDateString() <br />
-                Lõpp: @t.LoppKuupaev.ToShortDateString() <br />
-                Õpilased:
-                <ul>
-                    @foreach (var r in t.Registrations)
-                    {
-                        <li>@r.ApplicationUser.UserName</li>
-                    }
-                </ul>
-            </p>
-        </div>
-    </div>
-}
+<table class="table table-hover border">
+    <thead class="table-light">
+        <tr>
+            <th>Nimi</th>
+            <th>Kasutaja ID</th>
+            <th>Tegevused</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>@item.Nimi</strong></td>
+                <td>@item.ApplicationUserId</td>
+                <td>
+                    <span class="badge bg-info text-dark">Aktiivne</span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-
+<div class="mt-4">
+    <a href="@Url.Action("Create", "Trainings")" class="btn btn-primary">
+        Loo uus kursus (Vali õpetaja)
+    </a>
+</div>

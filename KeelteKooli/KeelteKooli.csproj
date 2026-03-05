@@ -290,6 +290,7 @@
     <Content Include="Views\Teacher\Dashboard.cshtml" />
     <Content Include="Views\Trainings\Create.cshtml" />
     <Content Include="Views\Registrations\Index.cshtml" />
+    <Content Include="Views\Teacher\CreateProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
