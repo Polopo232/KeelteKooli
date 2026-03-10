@@ -291,6 +291,8 @@
     <Content Include="Views\Trainings\Create.cshtml" />
     <Content Include="Views\Registrations\Index.cshtml" />
     <Content Include="Views\Teacher\CreateProfile.cshtml" />
+    <Content Include="Views\Trainings\Edit.cshtml" />
+    <Content Include="Views\Trainings\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
