@@ -1,25 +1,98 @@
 ﻿@model KeelteKooli.Models.Teacher
 
-<h2>Lisa uus õpetaja profiil</h2>
+@{
+    ViewBag.Title = "Lisa uus õpetaja";
+}
 
-@using (Html.BeginForm("CreateProfile", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg" style="border-radius: 1.5rem;">
+                <div class="card-body p-5">
 
-    <div class="card p-4 shadow-sm">
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Nimi, "Õpetaja nimi")
-            @Html.TextBoxFor(m => m.Nimi, new { @class = "form-control" })
-        </div>
+                    <div class="text-center mb-4">
+                        <div class="d-inline-block bg-primary bg-opacity-10 p-4 rounded-circle mb-3">
+                            <i class="bi bi-person-plus-fill text-primary fs-1"></i>
+                        </div>
+                        <h2 class="fw-bold">Lisa uus õpetaja</h2>
+                        <p class="text-muted small">Täitke andmed uue õpetaja profiili loomiseks</p>
+                    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Profiilipilt</label>
-            <input type="file" name="upload" class="form-control" accept="image/*" />
-        </div>
+                    @using (Html.BeginForm("CreateProfile", "Teacher", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
 
-        <div>
-            <button type="submit" class="btn btn-primary">Salvesta õpetaja</button>
-            <a href="@Url.Action("Dashboard")" class="btn btn-secondary ms-2">Tagasi</a>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold text-uppercase">Õpetaja täisnimi</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-primary"></i></span>
+                                @Html.TextBoxFor(m => m.Nimi, new { @class = "form-control border-start-0 ps-0", placeholder = "Näiteks: Mari Tamm" })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Nimi, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold text-uppercase">Profiilipilt</label>
+                            <div class="border rounded-4 p-4 text-center bg-light border-dashed shadow-sm">
+                                <i class="bi bi-cloud-arrow-up text-muted display-6 d-block mb-2"></i>
+                                <input type="file" name="upload" id="fileInput" class="form-control" accept="image/*" style="display:none;" onchange="previewFile()" />
+                                <button type="button" class="btn btn-outline-primary btn-sm mb-2" onclick="document.getElementById('fileInput').click()">
+                                    Vali pilt seadmest
+                                </button>
+                                <p class="text-muted small mb-0" id="fileName">Lubatud formaadid: JPG, PNG</p>
+
+                                <div id="previewContainer" class="mt-3" style="display:none;">
+                                    <img id="imagePreview" src="#" alt="Preview" class="rounded-circle shadow-sm" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid white;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25">
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold py-3">
+                                <i class="bi bi-check-lg"></i> Salvesta õpetaja
+                            </button>
+                            <a href="@Url.Action("Dashboard")" class="btn btn-link text-secondary text-decoration-none">
+                                Loobu ja mine tagasi
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
     </div>
-}
+</div>
+
+<script>function previewFile() {
+        const file = document.getElementById('fileInput').files[0];
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('previewContainer');
+        const nameLabel = document.getElementById('fileName');
+
+        if (file) {
+            const reader = new FileReader();
+            nameLabel.textContent = file.name;
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                container.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    }</script>
+
+<style>
+    .border-dashed {
+        border: 2px dashed #dee2e6 !important;
+    }
+
+    .input-group-text {
+        border: 1px solid #ced4da;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #0d6efd;
+    }
+</style>

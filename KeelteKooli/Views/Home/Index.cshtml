@@ -1,14 +1,60 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Avaleht";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">Keelte Kool</h1>
-    </section>
+<div class="container py-5">
+    <div class="row align-items-center min-vh-75">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3 text-dark">
+                Keelte Kool
+            </h1>
+            <p class="lead mb-4 text-muted">
+                Õpi uusi keeli mugavalt и tõhusalt. Meie kursused on loodud nii algajatele kui ka edasijõudnutele.
+            </p>
 
-    <div class="row">
-        <p class="lead">Registreeruda kursusele: </p>
-        @Html.ActionLink("Meie kursused", "Index", "Trainings", null, new { @class = "btn btn-primary btn-md" })
+            <div class="d-flex gap-3">
+                <a href="@Url.Action("Index", "Trainings")" class="btn btn-primary btn-lg px-4 shadow-sm">
+                    <i class="bi bi-arrow-right-circle me-2"></i>Meie kursused
+                </a>
+                <a href="@Url.Action("About", "Home")" class="btn btn-outline-secondary btn-lg px-4">
+                    Loe lähemalt
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-6 d-none d-lg-block text-center">
+            <div class="p-5 border-start border-5 border-primary bg-white shadow-sm rounded-3">
+                <blockquote class="blockquote mb-0 italic">
+                    <p class="fs-3 fw-light">"Keel on tee tarkuse juurde."</p>
+                    <footer class="blockquote-footer mt-2">Rahvatarkus</footer>
+                </blockquote>
+            </div>
+        </div>
     </div>
-</main>
+
+    <div class="row mt-5 pt-5 border-top">
+        <div class="col-md-4 mb-3">
+            <h5 class="fw-bold"><i class="bi bi-check2 text-primary me-2"></i>Paindlik õpe</h5>
+            <p class="small text-muted">Õpi siis, kui sul on aega.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <h5 class="fw-bold"><i class="bi bi-check2 text-primary me-2"></i>Sertifikaat</h5>
+            <p class="small text-muted">Lõpetamisel saad ametliku tõendi.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <h5 class="fw-bold"><i class="bi bi-check2 text-primary me-2"></i>Toetus</h5>
+            <p class="small text-muted">Õpetajad on alati valmis aitama.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Чтобы страница не казалась слишком пустой на больших экранах */
+    .min-vh-75 {
+        min-height: 60vh;
+    }
+
+    .btn {
+        border-radius: 8px;
+    }
+</style>

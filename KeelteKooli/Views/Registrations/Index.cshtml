@@ -1,50 +1,142 @@
 ﻿@using KeelteKooli.Models
 @model IEnumerable<KeelteKooli.Models.Registration>
 
-<h2>Ootel registreerimised</h2>
+@{
+    ViewBag.Title = "Registreerimiste haldus";
+    var pending = Model.Where(x => x.Staatus == RegistrationStatus.Ootel).ToList();
+    var history = Model.Where(x => x.Staatus != RegistrationStatus.Ootel).ToList();
+}
 
-<table class="table">
-    <tr>
-        <th>Õpilane</th>
-        <th>Koolitus</th>
-        <th>Tegevus</th>
-    </tr>
+<div class="container py-4">
+    <div class="d-flex align-items-center mb-4">
+        <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+            <i class="bi bi-people-fill text-primary fs-3"></i>
+        </div>
+        <div>
+            <h2 class="fw-bold mb-0">Kursustele registreerimine</h2>
+            <p class="text-muted mb-0">Halda õpilaste soove и kinnita osalemine</p>
+        </div>
+    </div>
 
-    @foreach (var r in Model.Where(x => x.Staatus == RegistrationStatus.Ootel))
-    {
-        <tr id="row-@r.Id">
-            <td>@r.ApplicationUser.Email</td>
-            <td>@r.Training.CourseName</td>
-            <td>
-                <a href="@Url.Action("Approve", new { id = r.Id })"
-                   class="btn btn-success">Kinnita</a>
+    <div class="card border-0 shadow-sm mb-5" style="border-radius: 1rem;">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="fw-bold text-warning">
+                <i class="bi bi-clock-history me-2"></i>Ootel registreerimised
+                <span class="badge rounded-pill bg-warning text-dark ms-2">@pending.Count</span>
+            </h4>
+        </div>
+        <div class="card-body px-4 pb-4">
+            @if (!pending.Any())
+            {
+                <div class="text-center py-4">
+                    <i class="bi bi-check2-circle display-4 text-success"></i>
+                    <p class="text-muted mt-2">Uusi soove hetkel pole.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="border-0 rounded-start">Õpilane</th>
+                                <th class="border-0">Koolitus</th>
+                                <th class="border-0 text-end rounded-end">Tegevus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in pending)
+                            {
+                                <tr id="row-@r.Id">
+                                    <td class="fw-bold text-dark">
+                                        <i class="bi bi-envelope me-2 text-muted"></i>@r.ApplicationUser.Email
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-primary border border-primary px-3">
+                                            @r.Training.CourseName
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group shadow-sm">
+                                            <a href="@Url.Action("Approve", new { id = r.Id })"
+                                               class="btn btn-success btn-sm px-3">
+                                                <i class="bi bi-check-lg me-1"></i>Kinnita
+                                            </a>
+                                            <a href="@Url.Action("Cancel", new { id = r.Id })"
+                                               class="btn btn-outline-danger btn-sm px-3">
+                                                <i class="bi bi-x-lg me-1"></i>Tühista
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
 
-                <a href="@Url.Action("Cancel", new { id = r.Id })"
-                   class="btn btn-danger">Tühista</a>
-            </td>
-        </tr>
+    <div class="card border-0 shadow-sm" style="border-radius: 1rem;">
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <h4 class="fw-bold text-secondary">
+                <i class="bi bi-archive me-2"></i>Kinnitatud ja tühistatud
+            </h4>
+        </div>
+        <div class="card-body px-4 pb-4">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="completed-table">
+                    <thead class="text-muted small text-uppercase">
+                        <tr>
+                            <th>Õpilane</th>
+                            <th>Koolitus</th>
+                            <th>Staatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in history)
+                        {
+                            var isConfirmed = r.Staatus == RegistrationStatus.Kinnitatud;
+                            <tr>
+                                <td class="text-muted">@r.ApplicationUser.Email</td>
+                                <td>@r.Training.CourseName</td>
+                                <td>
+                                    @if (isConfirmed)
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success px-2 py-1">
+                                            <i class="bi bi-check-circle-fill me-1"></i>Kinnitatud
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger border border-danger px-2 py-1">
+                                            <i class="bi bi-x-circle-fill me-1"></i>Tühistatud
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.02);
     }
-</table>
 
-<hr />
-
-<h2>Kinnitatud ja tühistatud</h2>
-
-<table class="table" id="completed-table">
-    <tr>
-        <th>Õpilane</th>
-        <th>Koolitus</th>
-        <th>Staatus</th>
-    </tr>
-
-    @foreach (var r in Model.Where(x => x.Staatus != RegistrationStatus.Ootel))
-    {
-        <tr>
-            <td>@r.ApplicationUser.Email</td>
-            <td>@r.Training.CourseName</td>
-            <td>
-                @(r.Staatus == RegistrationStatus.Kinnitatud ? "Kinnitatud" : "Tühistatud")
-            </td>
-        </tr>
+    .badge {
+        font-weight: 500;
     }
-</table>
+
+    .bg-success-subtle {
+        background-color: #d1e7dd;
+    }
+
+    .bg-danger-subtle {
+        background-color: #f8d7da;
+    }
+</style>

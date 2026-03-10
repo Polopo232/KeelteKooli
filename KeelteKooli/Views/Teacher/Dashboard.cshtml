@@ -3,8 +3,12 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Õpetajate profiilid</h2>
     <div>
-        <a href="@Url.Action("CreateProfile", "Teacher")" class="btn btn-success">Lisa õpetaja</a>
-        <a href="@Url.Action("Create", "Trainings")" class="btn btn-primary">Loo kursus</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a href="@Url.Action("CreateProfile", "Teacher")" class="btn btn-success rounded-pill px-4">
+                <i class="bi bi-plus-lg me-1"></i> Lisa õpetaja
+            </a>
+        }
     </div>
 </div>
 
@@ -12,32 +16,40 @@
     @foreach (var item in Model)
     {
         <div class="col">
-            <div class="card h-100 shadow-sm border-0">
+            <div class="card h-100 shadow-sm border-0 hover-shadow transition-all" style="border-radius: 1.25rem;">
                 <div class="text-center pt-4">
                     @if (!string.IsNullOrEmpty(item.FotoPath))
                     {
-                        <img src="~/Images/Teachers/@item.FotoPath" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover;" alt="@item.Nimi">
+                        <img src="~/Images/Teachers/@item.FotoPath" class="rounded-circle shadow-sm" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid white;" alt="@item.Nimi">
                     }
                     else
                     {
-                        <img src="https://ui-avatars.com/api/?name=@item.Nimi&background=random&size=120" class="rounded-circle shadow" alt="no image">
+                        <img src="https://ui-avatars.com/api/?name=@item.Nimi&background=random&size=120" class="rounded-circle shadow-sm" style="border: 4px solid white;" alt="no image">
                     }
                 </div>
+
                 <div class="card-body text-center">
-                    <h5 class="card-title mb-1">@item.Nimi</h5>
-                    <p class="text-muted small mb-3">ID: @(string.IsNullOrEmpty(item.ApplicationUserId) ? "Seostamata" : "Kasutaja olemas")</p>
-                    <span class="badge bg-success">Aktiivne</span>
+                    <h5 class="card-title fw-bold mb-1">@item.Nimi</h5>
+                    <p class="text-muted small mb-3">
+                        <i class="bi bi-info-circle me-1"></i>
+                        @(string.IsNullOrEmpty(item.ApplicationUserId) ? "Seostamata" : "Kasutaja olemas")
+                    </p>
+                    <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">Aktiivne</span>
                 </div>
-                <div class="card-footer bg-transparent border-0 text-center pb-4">
-                    @using (Html.BeginForm("Delete", "Teacher", new { id = item.Id }, FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-sm btn-outline-danger"
-                                onclick="return confirm('Kas olete kindel, et soovite õpetaja @item.Nimi kustutada?');">
-                            Kustuta profiil
-                        </button>
-                    }
-                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        @using (Html.BeginForm("Delete", "Teacher", new { id = item.Id }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                    onclick="return confirm('Kas olete kindel, et soovite õpetaja @item.Nimi kustutada?');">
+                                <i class="bi bi-trash3 me-1"></i> Kustuta profiil
+                            </button>
+                        }
+                    </div>
+                }
             </div>
         </div>
     }

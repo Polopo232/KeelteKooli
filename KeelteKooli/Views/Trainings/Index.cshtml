@@ -1,87 +1,90 @@
 ﻿@model IEnumerable<KeelteKooli.Models.Training>
-
 @using KeelteKooli.Models
 @using Microsoft.AspNet.Identity
+@{ ViewBag.Title = "Kursused"; }
 
-@{
-    ViewBag.Title = "Kursused";
-}
+<div class="container py-4">
+    <div class="row align-items-center mb-5">
+        <div class="col">
+            <h2 class="fw-bold">Kursuste kataloog</h2>
+            <p class="text-muted">Leia endale sobiv keelekursus ja alusta õppimist</p>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-auto">
+                <a class="btn btn-dark btn-lg rounded-pill shadow-sm" href="@Url.Action("Create", "Trainings")">
+                    <i class="bi bi-plus-lg"></i> Lisa uus kursus
+                </a>
+            </div>
+        }
+    </div>
 
-<h2>Kursused registreerimiseks</h2>
+    <div class="row">
+        @foreach (var t in Model)
+        {
+            var kinnitatudCount = t.Registrations?.Count(r => r.Staatus == RegistrationStatus.Kinnitatud) ?? 0;
+            var remainingSeats = t.MaxOsalejaid - kinnitatudCount;
+            var progress = (double)kinnitatudCount / t.MaxOsalejaid * 100;
 
-@if (User.IsInRole("Admin"))
-{
-    <p>
-        <a class="btn btn-success" href="@Url.Action("Create", "Trainings")">
-            + Lisa kursus
-        </a>
-    </p>
-}
-
-<div class="row">
-    @foreach (var t in Model)
-    {
-        var kinnitatudCount = t.Registrations?
-            .Count(r => r.Staatus == RegistrationStatus.Kinnitatud) ?? 0;
-        var remainingSeats = t.MaxOsalejaid - kinnitatudCount;
-
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">@((t.Course?.Nimetus) ?? "Kursus puudub")</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@((t.Teacher?.Nimi) ?? "Õpetaja puudub")</h6>
-                    <p>
-                        <strong>Keel / tase:</strong> @((t.Course?.Keel ?? "-")) - @((t.Course?.Tase ?? "-")) <br />
-                        <strong>Hind:</strong> @t.Hind € <br />
-                        <strong>Algus:</strong> @t.AlgusKuupaev.ToShortDateString() <br />
-                        <strong>Lõpp:</strong> @t.LoppKuupaev.ToShortDateString() <br />
-                        <strong>Kohti kokku:</strong> @t.MaxOsalejaid <br />
-                        <strong>Registreerunud:</strong> @kinnitatudCount <br />
-                        <strong>Vabu kohti:</strong> @remainingSeats
-                    </p>
-
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a href="@Url.Action("Edit", "Trainings", new { id = t.Id })"
-                           class="btn btn-warning mb-1">Muuda</a>
-                        <a href="@Url.Action("Delete", "Trainings", new { id = t.Id })"
-                           class="btn btn-danger mb-1">Kustuta</a>
-                    }
-
-                    @if (User.IsInRole("Student"))
-                    {
-                        var userId = User.Identity.GetUserId();
-                        var myRegistration = t.Registrations?
-                            .FirstOrDefault(r => r.ApplicationUserId == userId);
-
-                        if (myRegistration == null)
-                        {
-                            if (remainingSeats > 0)
-                            {
-                                <a href="@Url.Action("Register", "Trainings", new { id = t.Id })"
-                                   class="btn btn-primary">Registreeru</a>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">Rühm täis</span>
-                            }
-                        }
-                        else
-                        {
-                            <span class="badge @(myRegistration.Staatus == RegistrationStatus.Ootel ? "bg-warning" : "bg-success")">
-                                @myRegistration.Staatus
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden" style="border-radius: 20px;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge rounded-pill bg-light text-primary border border-primary px-3 py-2">
+                                @(t.Course?.Keel ?? "-") @(t.Course?.Tase ?? "-")
                             </span>
-                        }
-                    }
-                    else if (User.IsInRole("Teacher"))
-                    {
-                        <span class="text-muted fst-italic">
-                            Ainult vaatamiseks
-                        </span>
-                    }
+                            <h4 class="text-primary fw-bold mb-0">@t.Hind €</h4>
+                        </div>
 
+                        <h5 class="fw-bold mb-1">@((t.Course?.Nimetus) ?? "Kursus puudub")</h5>
+                        <p class="text-muted small mb-4"><i class="bi bi-person"></i> @((t.Teacher?.Nimi) ?? "Õpetaja puudub")</p>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1 small font-monospace">
+                                <span>Vabu kohti: @remainingSeats</span>
+                                <span>@kinnitatudCount / @t.MaxOsalejaid</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: @progress%"></div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            @if (User.IsInRole("Student"))
+                            {
+                                var userId = User.Identity.GetUserId();
+                                var myRegistration = t.Registrations?.FirstOrDefault(r => r.ApplicationUserId == userId);
+
+                                if (myRegistration == null)
+                                {
+                                    if (remainingSeats > 0)
+                                    {
+                                        <a href="@Url.Action("Register", "Trainings", new { id = t.Id })" class="btn btn-primary rounded-pill">Registreeru kohe</a>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-outline-secondary rounded-pill disabled">Rühm täis</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="alert alert-info py-2 text-center rounded-pill mb-0">
+                                        Status: <strong>@myRegistration.Staatus</strong>
+                                    </div>
+                                }
+                            }
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="btn-group w-100">
+                                    <a href="@Url.Action("Edit", "Trainings", new { id = t.Id })" class="btn btn-outline-warning">Muuda</a>
+                                    <a href="@Url.Action("Delete", "Trainings", new { id = t.Id })" class="btn btn-outline-danger">Kustuta</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
