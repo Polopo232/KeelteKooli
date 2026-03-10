@@ -65,16 +65,15 @@ public class TrainingsController : Controller
     [Authorize(Roles = "Student")]
     public ActionResult MyCourses()
     {
-        string userId = User.Identity.GetUserId();
-
-        var myTrainings = db.Registrations
-            .Where(r => r.ApplicationUserId == userId && r.Staatus == RegistrationStatus.Kinnitatud)
-            .Include(r => r.Training.Course)
-            .Include(r => r.Training.Teacher)
-            .Select(r => r.Training)
+        var userId = User.Identity.GetUserId();
+        var myCourses = db.Trainings
+            .Include(t => t.Course)
+            .Include(t => t.Teacher)
+            .Include(t => t.Registrations)
+            .Where(t => t.Registrations.Any(r => r.ApplicationUserId == userId))
             .ToList();
 
-        return View(myTrainings);
+        return View(myCourses);
     }
 
     public ActionResult Create()
