@@ -12,7 +12,7 @@ public class TeacherController : Controller
 {
     private ApplicationDbContext db = new ApplicationDbContext();
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Teacher")]
     public ActionResult Dashboard()
     {
         var teachers = db.Teachers.ToList();

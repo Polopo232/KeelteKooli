@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using System.Data.Entity;
-using KeelteKooli.Models;
+﻿using KeelteKooli.Models;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
 
 public class TrainingsController : Controller
 {
@@ -111,6 +112,81 @@ public class TrainingsController : Controller
         return View();
     }
 
+    // GET: Trainings/Edit/5
+    public ActionResult Edit(int? id)
+    {
+        if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        Training training = db.Trainings.Find(id);
+        if (training == null) return HttpNotFound();
+
+        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi", training.TeacherId);
+        return View(training);
+    }
+
+    // POST: Trainings/Edit/5
+    // POST: Trainings/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Edit(Training training)
+    {
+        if (ModelState.IsValid)
+        {
+            var trainingInDb = db.Trainings
+                                 .Include(t => t.Course)
+                                 .FirstOrDefault(t => t.Id == training.Id);
+
+            if (trainingInDb != null)
+            {
+                trainingInDb.TeacherId = training.TeacherId;
+                trainingInDb.AlgusKuupaev = training.AlgusKuupaev;
+                trainingInDb.LoppKuupaev = training.LoppKuupaev;
+                trainingInDb.Hind = training.Hind;
+                trainingInDb.MaxOsalejaid = training.MaxOsalejaid;
+
+                if (trainingInDb.Course != null)
+                {
+                    trainingInDb.Course.Nimetus = training.CourseName;
+                    trainingInDb.Course.Keel = training.CourseKeel;
+                    trainingInDb.Course.Tase = training.CourseTase;
+                }
+
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+        }
+
+        ViewBag.TeacherId = new SelectList(db.Teachers, "Id", "Nimi", training.TeacherId);
+        return View(training);
+    }
+
+    // GET: Trainings/Delete/5
+    public ActionResult Delete(int? id)
+    {
+        if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+        var training = db.Trainings.Include(t => t.Course).Include(t => t.Teacher).FirstOrDefault(t => t.Id == id);
+
+        if (training == null) return HttpNotFound();
+
+        return View(training);
+    }
+
+    // POST: Trainings/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public ActionResult DeleteConfirmed(int id)
+    {
+        Training training = db.Trainings.Find(id);
+
+        // Если нужно удалить и сам курс из таблицы Courses:
+        // var course = db.Courses.Find(training.CourseId);
+        // if (course != null) db.Courses.Remove(course);
+
+        db.Trainings.Remove(training);
+        db.SaveChanges();
+        return RedirectToAction("Index");
+    }
 
     protected override void Dispose(bool disposing)
     {
