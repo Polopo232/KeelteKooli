@@ -1,60 +1,72 @@
 ﻿@model KeelteKooli.Models.Training
+@{ ViewBag.Title = "Lisa kursus"; }
 
-@{
-    ViewBag.Title = "Lisa kursus";
-}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg" style="border-radius: 1.5rem;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-plus-circle text-primary" style="font-size: 3rem;"></i>
+                        <h2 class="fw-bold mt-2">Uue kursuse loomine</h2>
+                    </div>
 
-<h2>Lisa kursus</h2>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+                        <div class="form-floating mb-3">
+                            @Html.TextBoxFor(m => m.CourseName, new { @class = "form-control rounded-3", placeholder = "Nimi", id = "nameInput" })
+                            <label for="nameInput">Kursuse nimetus</label>
+                        </div>
 
-    <div class="mb-3">
-        @Html.LabelFor(m => m.CourseName)
-        @Html.TextBoxFor(m => m.CourseName, new { @class = "form-control", placeholder = "Kursuse nimetus" })
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small fw-bold text-uppercase">Õppekeel</label>
+                                @Html.TextBoxFor(m => m.CourseKeel, new { @class = "form-control form-control-lg", placeholder = "Näiteks: Inglise" })
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small fw-bold text-uppercase">Keeletase</label>
+                                @Html.DropDownListFor(m => m.CourseTase,
+                                          new SelectList(new[] { "A1", "A2", "B1", "B2", "C1", "C2" }),
+                                          "-- vali tase --", new { @class = "form-select form-select-lg" })
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold text-uppercase">Vastutav õpetaja</label>
+                            @Html.DropDownListFor(m => m.TeacherId, (SelectList)ViewBag.TeacherId, "-- vali õpetaja --", new { @class = "form-select" })
+                        </div>
+
+                        <div class="row p-3 bg-light rounded-4 mb-4 g-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted">Alguskuupäev</label>
+                                @Html.TextBoxFor(m => m.AlgusKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted">Lõppkuupäev</label>
+                                @Html.TextBoxFor(m => m.LoppKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted">Hind (€)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    @Html.TextBoxFor(m => m.Hind, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small text-muted">Maksimaalne osalejate arv</label>
+                                @Html.TextBoxFor(m => m.MaxOsalejaid, new { @class = "form-control", type = "number" })
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow">Salvesta kursus</button>
+                            <a href="@Url.Action("Index", "Trainings")" class="btn btn-link text-secondary">Tühista</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.CourseKeel, "Keel")
-            @Html.TextBoxFor(m => m.CourseKeel, new { @class = "form-control", placeholder = "Näiteks: Saksa" })
-        </div>
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.CourseTase, "Tase")
-            @Html.DropDownListFor(m => m.CourseTase,
-                     new SelectList(new[] { "A1", "A2", "B1", "B2", "C1", "C2" }),
-                     "-- vali tase --", new { @class = "form-select" })
-        </div>
-    </div>
-
-    <div class="mb-3">
-        @Html.Label("Õpetaja")
-        @Html.DropDownListFor(m => m.TeacherId, (SelectList)ViewBag.TeacherId, "-- vali õpetaja --", new { @class = "form-select" })
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.AlgusKuupaev, "Alguskuupäev")
-            @Html.TextBoxFor(m => m.AlgusKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-        </div>
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.LoppKuupaev, "Lõppkuupäev")
-            @Html.TextBoxFor(m => m.LoppKuupaev, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.Hind, "Hind (€)")
-            @Html.TextBoxFor(m => m.Hind, new { @class = "form-control", placeholder = "Sisesta hind" })
-        </div>
-        <div class="col-md-6">
-            @Html.LabelFor(m => m.MaxOsalejaid, "Maksimaalne osalejate arv")
-            @Html.TextBoxFor(m => m.MaxOsalejaid, new { @class = "form-control", placeholder = "Sisesta arv" })
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Salvesta</button>
-    <a href="@Url.Action("Index", "Trainings")" class="btn btn-secondary ms-2">Tagasi</a>
-}
+</div>Ы

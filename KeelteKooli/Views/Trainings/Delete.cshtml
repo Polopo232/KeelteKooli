@@ -1,0 +1,54 @@
+﻿@model KeelteKooli.Models.Training
+
+@{
+    ViewBag.Title = "Kustuta kursus";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg" style="border-radius: 1.5rem;">
+                <div class="card-body p-5 text-center">
+
+                    <div class="mb-4">
+                        <div class="display-1 text-danger">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                        <h2 class="fw-bold mt-3">Kas oled kindel?</h2>
+                        <p class="text-muted">See tegevus on pöördumatu. Kursus <strong>@Model.Course.Nimetus</strong> ja kõik sellega seotud registreerimised kustutatakse.</p>
+                    </div>
+
+                    <div class="bg-light rounded-4 p-4 mb-4 text-start">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Kursus:</span>
+                            <span class="fw-bold">@Model.Course.Nimetus</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Õpetaja:</span>
+                            <span>@Model.Teacher.Nimi</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Ajavahemik:</span>
+                            <span>@Model.AlgusKuupaev.ToShortDateString() - @Model.LoppKuupaev.ToShortDateString()</span>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg rounded-pill shadow-sm fw-bold">
+                                <i class="bi bi-trash3"></i> Jah, kustuta kursus
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-link text-secondary text-decoration-none">
+                                Ei, mine tagasi
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
