@@ -4,6 +4,7 @@
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -17,123 +18,85 @@
 
         protected override void Seed(KeelteKooli.Models.ApplicationDbContext context)
         {
-            var roleManager = new RoleManager<IdentityRole>(
-                new RoleStore<IdentityRole>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
             string[] roles = { "Admin", "Teacher", "Student" };
-
             foreach (var role in roles)
             {
-                if (!roleManager.RoleExists(role))
-                {
-                    roleManager.Create(new IdentityRole(role));
-                }
+                if (!roleManager.RoleExists(role)) roleManager.Create(new IdentityRole(role));
             }
 
-            var userManager = new UserManager<ApplicationUser>(
-                new UserStore<ApplicationUser>(context));
+            CreateUserIfNotExists(userManager, "admin@test.ee", "Admin");
+            CreateUserIfNotExists(userManager, "student@test.ee", "Student");
 
-            // ----- Teacher -----
-
-            // 2. Создаём тестового пользователя
-            var teacherEmail = "teacher@test.ee";
-            var teacherUser = userManager.FindByEmail(teacherEmail);
-
-            if (teacherUser == null)
+            var seedData = new List<(string Name, string Email, string Qual, string CourseName, string Lang, string Level, decimal Price)>
             {
-                teacherUser = new ApplicationUser
-                {
-                    UserName = teacherEmail,
-                    Email = teacherEmail
-                };
+                ("John Smith", "smith@test.ee", "Master of Arts", "English for Beginners", "Inglise", "A1", 150),
+                ("Emily Johnson", "johnson@test.ee", "PhD in Linguistics", "Business English", "Inglise", "C1", 250),
+                ("Michael Brown", "brown@test.ee", "TEFL Certified", "German Intermediate", "Saksa", "B1", 180),
+                ("Sarah Davis", "davis@test.ee", "Language Expert", "French Basics", "Prantsuse", "A2", 160),
+                ("Robert Wilson", "wilson@test.ee", "Native Speaker", "Spanish Conversation", "Hispaania", "B2", 200),
+                ("Jennifer Miller", "miller@test.ee", "C2 Expert", "Estonian for Foreigners", "Eesti", "A1", 120)
+            };
 
-                userManager.Create(teacherUser, "Test123!");
-            }
-
-            // 3. Добавляем пользователя в роль Teacher
-            if (!userManager.IsInRole(teacherUser.Id, "Teacher"))
+            foreach (var item in seedData)
             {
-                userManager.AddToRole(teacherUser.Id, "Teacher");
+                CreateTeacherAndTraining(context, userManager, item);
             }
 
-            // 4. Создаём запись в таблице Teachers
-            var teacher = context.Teachers.FirstOrDefault(t => t.ApplicationUserId == teacherUser.Id);
+            context.SaveChanges();
+        }
 
+        private void CreateUserIfNotExists(UserManager<ApplicationUser> userManager, string email, string role)
+        {
+            var user = userManager.FindByEmail(email);
+            if (user == null)
+            {
+                user = new ApplicationUser { UserName = email, Email = email };
+                userManager.Create(user, "Test123!");
+                userManager.AddToRole(user.Id, role);
+            }
+        }
+
+        private void CreateTeacherAndTraining(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+            (string Name, string Email, string Qual, string CourseName, string Lang, string Level, decimal Price) data)
+        {
+            var user = userManager.FindByEmail(data.Email);
+            if (user == null)
+            {
+                user = new ApplicationUser { UserName = data.Email, Email = data.Email };
+                userManager.Create(user, "Test123!");
+                userManager.AddToRole(user.Id, "Teacher");
+            }
+
+            var teacher = context.Teachers.FirstOrDefault(t => t.ApplicationUserId == user.Id);
             if (teacher == null)
             {
-                teacher = new Teacher
-                {
-                    Nimi = "Mari Speek",
-                    Kvalifikatsioon = "C1",
-                    ApplicationUserId = teacherUser.Id
-                };
-
+                teacher = new Teacher { Nimi = data.Name, Kvalifikatsioon = data.Qual, ApplicationUserId = user.Id };
                 context.Teachers.Add(teacher);
                 context.SaveChanges();
             }
 
-            // 5. Создаём тестовый курс (Course)
-            var course = context.Courses.FirstOrDefault(c => c.Nimetus == "Eesti B2");
-
+            var course = context.Courses.FirstOrDefault(c => c.Nimetus == data.CourseName);
             if (course == null)
             {
-                course = new Course
-                {
-                    Nimetus = "Eesti B2",
-                    Keel = "Eesti",
-                    Tase = "B2"
-                };
-
+                course = new Course { Nimetus = data.CourseName, Keel = data.Lang, Tase = data.Level };
                 context.Courses.Add(course);
                 context.SaveChanges();
             }
 
-
-            // 6. Создаём Training и привязываем к õpetaja
-            var training = context.Trainings
-                .FirstOrDefault(t => t.CourseId == course.Id && t.TeacherId == teacher.Id);
-
-            if (training == null)
+            if (!context.Trainings.Any(t => t.CourseId == course.Id && t.TeacherId == teacher.Id))
             {
-                training = new Training
+                context.Trainings.Add(new Training
                 {
                     CourseId = course.Id,
                     TeacherId = teacher.Id,
-                    AlgusKuupaev = DateTime.Now.AddDays(7),
-                    LoppKuupaev = DateTime.Now.AddMonths(1),
-                    MaxOsalejaid = 10,
-                    Hind = 120
-                };
-
-                context.Trainings.Add(training);
-                context.SaveChanges();
-            }
-            // ----- Admin -----
-            var adminUser = userManager.FindByEmail("admin@test.ee");
-            if (adminUser == null)
-            {
-                adminUser = new ApplicationUser
-                {
-                    UserName = "admin@test.ee",
-                    Email = "admin@test.ee"
-                };
-
-                userManager.Create(adminUser, "Test123!");
-                userManager.AddToRole(adminUser.Id, "Admin");
-            }
-
-            // ----- Student -----
-            var studentUser = userManager.FindByEmail("student@test.ee");
-            if (studentUser == null)
-            {
-                studentUser = new ApplicationUser
-                {
-                    UserName = "student@test.ee",
-                    Email = "student@test.ee"
-                };
-
-                userManager.Create(studentUser, "Test123!");
-                userManager.AddToRole(studentUser.Id, "Student");
+                    AlgusKuupaev = DateTime.Now.AddDays(14),
+                    LoppKuupaev = DateTime.Now.AddMonths(3),
+                    MaxOsalejaid = 12,
+                    Hind = data.Price
+                });
             }
         }
     }
