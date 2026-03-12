@@ -1,7 +1,7 @@
 ﻿@using KeelteKooli.Models
 @model LoginViewModel
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Logi sisse";
 }
 
 <main aria-labelledby="title">
@@ -15,14 +15,15 @@
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="row">
-                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
+                        @* Если в модели не заданы Display Name на эстонском, можно заменить LabelFor на кастомный текст *@
+                        @Html.LabelFor(m => m.Email, "E-post", new { @class = "col-md-2 col-form-label" })
                         <div class="col-md-10">
                             @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="row">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
+                        @Html.LabelFor(m => m.Password, "Parool", new { @class = "col-md-2 col-form-label" })
                         <div class="col-md-10">
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
@@ -32,17 +33,17 @@
                         <div class="offset-md-2 col-md-10">
                             <div class="checkbox">
                                 @Html.CheckBoxFor(m => m.RememberMe)
-                                @Html.LabelFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe, "Jäta mind meelde")
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="offset-md-2 col-md-10">
-                            <input type="submit" value="Log in" class="btn btn-outline-dark" />
+                            <input type="submit" value="Logi sisse" class="btn btn-outline-dark" />
                         </div>
                     </div>
                     <p>
-                        @Html.ActionLink("Register as a new user", "Register")
+                        @Html.ActionLink("Registreeru uueks kasutajaks", "Register")
                     </p>
                 }
             </section>
